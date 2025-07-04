@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Message } from "@/schema/message";
-import { cn, toPusherKey } from "@/lib/utils";
+import { toPusherKey } from "@/lib/utils";
 import { useState } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -43,47 +43,29 @@ export default function Messages(props: messagesprops) {
   };
 
   return (
-    <div id="messages" className="flex h-full flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
+    <div id="messages" className="flex-1 overflow-y-auto flex flex-col-reverse gap-4 px-4 py-3 scrollbar-thin scrollbar-thumb-indigo-300">
       <div ref={scrollDownRef} />
 
       {messages.map((message, index) => {
         const isCurrentUser = message.senderId === props.sessionId;
-
-        const hasNextMessageFromSameUser = messages[index - 1]?.senderId === messages[index].senderId;
+        const hasNext = messages[index - 1]?.senderId === message.senderId;
 
         return (
-          <div className="chat-message" key={`${message.id}-${message.timestamp}`}>
-            <div
-              className={cn("flex items-end", {
-                "justify-end": isCurrentUser,
-              })}
-            >
-              <div
-                className={cn("flex flex-col space-y-2 text-base max-w-xs mx-2", {
-                  "order-1 items-end": isCurrentUser,
-                  "order-2 items-start": !isCurrentUser,
-                })}
-              >
-                <span
-                  className={cn("px-4 py-2 rounded-lg inline-block", {
-                    "bg-indigo-600 text-white": isCurrentUser,
-                    "bg-gray-200 text-gray-900": !isCurrentUser,
-                    "rounded-br-none": !hasNextMessageFromSameUser && isCurrentUser,
-                    "rounded-bl-none": !hasNextMessageFromSameUser && !isCurrentUser,
-                  })}
-                >
-                  {message.text} <span className="ml-2 text-xs text-gray-400">{formatTimestamp(message.timestamp)}</span>
-                </span>
-              </div>
+          <div key={message.id} className="chat-message">
+            <div className={`flex items-end ${isCurrentUser ? "justify-end" : "justify-start"}`}>
+              <div className={`flex items-end ${isCurrentUser ? "flex-row-reverse" : "flex-row"} gap-2`}>
+                {!hasNext && (
+                  <div className="relative w-6 h-6">
+                    <Image fill referrerPolicy="no-referrer" src={isCurrentUser ? props.sessionImg || "/default-avatar.png" : props.chatPartner.image || "/default-avatar.png"} alt="Profile" className="rounded-full object-cover" />
+                  </div>
+                )}
 
-              <div
-                className={cn("relative w-6 h-6", {
-                  "order-2": isCurrentUser,
-                  "order-1": !isCurrentUser,
-                  invisible: hasNextMessageFromSameUser,
-                })}
-              >
-                <Image fill src={isCurrentUser ? (props.sessionImg as string) : props.chatPartner.image} alt="Profile picture" referrerPolicy="no-referrer" className="rounded-full" />
+                <div className={`flex flex-col space-y-1 text-sm max-w-xs ${isCurrentUser ? "items-end" : "items-start"}`}>
+                  <span className={`px-4 py-2 rounded-xl ${isCurrentUser ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"} ${!hasNext && (isCurrentUser ? "rounded-br-none" : "rounded-bl-none")}`}>
+                    {message.text}
+                    <span className="ml-2 text-xs text-gray-400 block text-end">{formatTimestamp(message.timestamp)}</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>

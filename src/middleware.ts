@@ -10,7 +10,7 @@ export default withAuth(
     const isAuth = await getToken({ req });
     const isLoginPage = pathname.startsWith("/login");
 
-    const sensitiveRoutes = ["/", "/dashboard", "/profile", "/settings"];
+    const sensitiveRoutes = ["/dashboard", "/profile", "/settings"];
     const isSensitiveRoute = sensitiveRoutes.some((route) => pathname.startsWith(route));
 
     if (isLoginPage) {
@@ -23,9 +23,6 @@ export default withAuth(
 
     if (!isAuth && isSensitiveRoute) {
       return NextResponse.redirect(new URL("/login", req.url));
-    }
-    if (pathname === "/") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
   },
   {

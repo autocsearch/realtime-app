@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { pusherClient } from "@/lib/pusher";
 import { useRouter } from "next/navigation";
+// import SidebarCustomContext from "@/components/SidebarCustomContext";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -47,7 +48,7 @@ export default function SidebarChatList({ friends, sessionId }: SidebarChatListP
             }}
             className="flex items-center gap-3"
           >
-            <Image src={message.senderImg} alt={message.senderName} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" width={100} height={100} />
+            <Image src={message.senderImg} alt={message.senderName} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" width={35} height={35} />
             <div className="flex flex-col text-black">
               <span className="font-medium">{message.senderName}</span>
               <span className="text-sm text-muted-foreground">{message.text}</span>
@@ -84,10 +85,10 @@ export default function SidebarChatList({ friends, sessionId }: SidebarChatListP
         }).length;
         return (
           <li key={friend.id}>
-            <a href={`/dashboard/chats/${chatHrefConstructor(sessionId, friend.id)}`} className="text-gray-700 hover:text-indigo-600 item-center hover:bg-gray-50 group flex gap-3 rounded-md p-2 text-sm leading-6 font-semibold">
-              <Image src={friend.image || "/default-profile.png"} alt={`${friend.name}'s profile`} width={32} height={32} className="rounded-full" />
+            <a href={`/dashboard/chats/${chatHrefConstructor(sessionId, friend.id)}`} className="flex justify-start mx-2 items-center gap-2 hover:bg-slate-300 rounded-lg">
+              <Image src={friend.image || "/default-profile.png"} alt={`${friend.name}'s profile`} className="rounded-full" width={35} height={35} />
               {friend.name}
-              {unSeenMessagesCount > 0 ? <div className="bg-indigo-600 font-medium text-xs text-white w-4 h-4 rounded-full flex justify-center items-center">{unSeenMessagesCount}</div> : null}
+              {unSeenMessagesCount > 0 ? <div className="bg-indigo-600 font-medium text-xs text-white w-6 h-6 rounded-full flex justify-center items-center">{unSeenMessagesCount}</div> : null}
             </a>
           </li>
         );

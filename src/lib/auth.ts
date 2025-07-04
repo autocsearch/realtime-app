@@ -3,7 +3,6 @@ import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { fetchRedis } from "@/helpers/redis";
-import {} from "next/navigation";
 
 function getGoogleCredentials() {
   const clientId = process.env.GOOGLE_CLIENT_ID;

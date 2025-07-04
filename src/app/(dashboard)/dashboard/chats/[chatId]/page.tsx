@@ -9,7 +9,7 @@ import Messages from "@/components/Messages";
 import ChatInput from "@/components/ChatInput";
 
 interface chatsProps {
-  params: { chatId: string };
+  params: Promise<{ chatId: string }>;
 }
 
 async function GetChatMessages(chatId: string) {
@@ -28,7 +28,8 @@ async function GetChatMessages(chatId: string) {
 }
 
 export default async function Chats(props: chatsProps) {
-  const { chatId } = await props.params;
+  const params = await props.params;
+  const { chatId } = params;
 
   const session = await getServerSession(authOptions);
 
@@ -50,23 +51,19 @@ export default async function Chats(props: chatsProps) {
 
   return (
     <div className="flex flex-1 justify-between flex-col h-full max-h-[calc(100vh-6rem)]">
-      <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
-        <div className="relative flex items-ceter space-x-4">
-          <div className="relative">
-            <div className="relative w-8 sm:w-12 h-8 sm:h-12">
-              <Image fill referrerPolicy="no-referrer" alt={`${chatsPartner.name}`} src={chatsPartner.image} className="rounded-full" />
-            </div>
+      <div className="flex items-center justify-between py-3 px-4  rounded-2xl shadow-sm bg-indigo-50">
+        <div className="flex items-center gap-4">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+            <Image fill referrerPolicy="no-referrer" alt={chatsPartner.name} src={chatsPartner.image} className="rounded-full object-cover ring-2 ring-indigo-300" />
           </div>
-          <div className="flex flex-col leading-tight">
-            <div className="text-xl flex items-center">
-              <span className="text-gray-700 mr-3 font-semibold">{chatsPartner.name}</span>
-            </div>
-            <span className="text-sm text-gray-600">{chatsPartner.email}</span>
+          <div className="flex flex-col">
+            <span className="text-lg font-semibold text-gray-900">{chatsPartner.name}</span>
+            <span className="text-sm text-gray-500">{chatsPartner.email}</span>
           </div>
         </div>
       </div>
 
-      <Messages initialMessages={initialMessages} sessionId={session.user.id} chatPartner={chatsPartner} sessionImg={session.user.image} chatId={chatId} />
+      <Messages initialMessages={initialMessages} sessionId={session.user.id} sessionImg={session.user.image} chatPartner={chatsPartner} chatId={chatId} />
       <ChatInput chatsPartner={chatsPartner} chatId={chatId} />
     </div>
   );

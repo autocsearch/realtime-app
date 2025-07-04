@@ -1,14 +1,12 @@
 "use client";
+
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "@/schema/form-schemas";
-
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
-
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -46,37 +44,35 @@ export default function AddFriend() {
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again.");
     }
   };
 
   return (
-    <div className="max-w-sm'">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    className="block max-w-md rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    placeholder="Enter your friend's email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="mt-3">
-            Add Friend
-          </Button>
-        </form>
-        {success && <p className="text-green-500 mt-2">🎉 Friend requested successfully!</p>}
-      </Form>
-    </div>
+    <main className="min-h-[400px] md:h-[630px] flex items-center justify-center px-4 bg-indigo-50 rounded-2xl">
+      <div className="w-full max-w-md bg-white rounded-xl p-6 shadow-md sm:my-6">
+        <h2 className="text-xl font-semibold text-center text-gray-800 mb-4">Add a Friend</h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your friend's email" {...field} className="w-full" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="mt-4 w-full bg-slate-500 text-white hover:text-black hover:bg-slate-400">
+              Add Friend
+            </Button>
+          </form>
+        </Form>
+        {success && <p className="text-green-500 text-center mt-2 transition-opacity duration-300 ease-in-out">🎉 Friend requested successfully!</p>}
+      </div>
+    </main>
   );
 }
